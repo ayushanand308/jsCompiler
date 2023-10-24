@@ -10,7 +10,7 @@ function lexer(input){
         if(current===")"){
             tokens.push({
                 type:"paren",
-                value:"}" 
+                value:")" 
             })
             i++;
             continue;
@@ -65,4 +65,7 @@ function lexer(input){
     }
     return tokens; 
 }
+
+
+
 
