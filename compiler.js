@@ -67,5 +67,59 @@ function lexer(input){
 }
 
 
+function parser(tokens){
+    let i=0;
+
+    let ast={
+        type:program,
+        body:[]
+    };
+
+    function recur(){
+        let token=tokens[i];
+
+        if(token.type==='paren' && token.value==='('){
+            token=tokens[++i];
+            let obj={
+                type:'callExpression',
+                name:token.value,
+                params:[],
+            }
+
+            token=tokens[++i];
+
+            while(token.type!=='paren' || (token.val==='paren' && token.value!==')')){
+                obj.params.push(recur());
+                token=tokens[++i];
+            }
+
+            return obj;
+        }
+        else if(token.tpye==='number'){
+            let obj={
+                type:'numberLiteral',
+                value:token.value
+            }
+            i++;
+            return obj
+
+
+        }else if(token.type==='string'){
+            let obj={
+                type:'stringLiteral',
+                value:token.value,
+            };
+            return obj;
+        }
+
+        throw new TypeError("Error");
+    }
+
+    while(i<tokens.length){
+        ast.body.push(recur());
+    }
+
+    return ast;
+}
 
 
